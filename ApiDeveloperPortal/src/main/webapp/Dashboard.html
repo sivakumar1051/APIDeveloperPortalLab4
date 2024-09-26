@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Key Management Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .api-keys-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .api-keys-table th, .api-keys-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .api-keys-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .api-keys-table td {
+            background-color: #fff;
+        }
+
+        .button {
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .button:disabled {
+            background-color: #cccccc;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .generate-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .message, .error-message {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .message {
+            color: green;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>API Key Management Dashboard</h2>
+
+    <table class="api-keys-table">
+        <thead>
+        <tr>
+            <th>API Key</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <div class="generate-section">
+        <form action="apiKeys" method="post">
+            <input type="hidden" name="action" value="generate">
+            <button class="button" type="submit">Generate New API Key</button>
+        </form>
+    </div>
+
+    <div class="message"></div>
+    <div class="error-message"></div>
+</div>
+
+</body>
+</html>

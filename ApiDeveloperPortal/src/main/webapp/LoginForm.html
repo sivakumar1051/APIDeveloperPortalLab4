@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }h2 {
+            text-align: center;
+        }form {
+            max-width: 300px;
+            margin: 0 auto;
+        }label {
+            display: block;
+            margin-bottom: 5px;
+        }input[type="text"],
+        input[type="password"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }input[type="submit"] {
+            cursor: pointer;
+        }
+        
+
+    </style>
+</head>
+
+<body>
+    <h2>User Login</h2>
+    <form action="login" method="post">
+        <label for="UserName">Username:</label>
+        <input type="text" id="UserName" name="UserName" required>
+
+        <label for="Password">Password:</label>
+        <input type="password" id="Password" name="Password" required>
+
+        <input type="submit" value="Login">
+    </form>
+</body>
+
+</html>
