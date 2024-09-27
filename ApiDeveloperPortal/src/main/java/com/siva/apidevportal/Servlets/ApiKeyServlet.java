@@ -31,28 +31,25 @@ public class ApiKeyServlet extends HttpServlet {
         int userId = (int) session.getAttribute("user_id");
         List<ApiKeys> apiKeys = apiRepository.getApiKeysForUser(userId);
 
-        
+        // Determine if we need to show the management page or dashboard
         if (request.getParameter("manage") != null) {
-            // redirecting to api management page
             displayApiKeyManagement(out, apiKeys);
         } else {
-            // redirecting to dashboard page
             displayAvailableApiKeys(out, apiKeys);
         }
     }
 
-    // displaying details in management page
+    // Method to display the management page
     private void displayApiKeyManagement(PrintWriter out, List<ApiKeys> apiKeys) {
         out.println("<html>");
         out.println("<head>");
         out.println("<title>API Key Management</title>");
         out.println("<link rel='stylesheet' type='text/css' href='DashboardStyle.css'>");
         out.println("</head>");
-        
         out.println("<body>");
         out.println("<h2>API Key Management</h2>");
         out.println("<div class='center'>");
-        out.println("<form action='apiKeys' method='GET'>");
+        out.println("<form action='apiKeys' method='POST'>");
         out.println("<button type='submit' name='action' value='generate'>Regenerate API Key</button>");
         out.println("</form>");
         out.println("</div>");
@@ -65,7 +62,7 @@ public class ApiKeyServlet extends HttpServlet {
                 out.println("<tr>");
                 out.println("<td>" + apiKey.getApi_Key() + "</td>");
                 out.println("<td>" + apiKey.getStatus() + "</td>");
-                out.println("<td>" + apiKey.getCreatedAt() + "</td>"); // Assuming getCreatedAt() exists
+                out.println("<td>" + apiKey.getCreatedAt() + "</td>");
                 out.println("<td><form action='apiKeys' method='POST'>");
                 out.println("<input type='hidden' name='apiKey' value='" + apiKey.getApi_Key() + "'>");
                 out.println("<button type='submit' name='action' value='deactivate'>Deactivate</button>");
@@ -74,13 +71,10 @@ public class ApiKeyServlet extends HttpServlet {
             }
             out.println("</table>");
         }
-
-        
-
         out.println("</body></html>");
     }
 
-    // displaying details in dashboard page
+    // Method to display the dashboard page
     private void displayAvailableApiKeys(PrintWriter out, List<ApiKeys> apiKeys) {
         out.println("<html>");
         out.println("<head>");
@@ -89,7 +83,6 @@ public class ApiKeyServlet extends HttpServlet {
         out.println("</head>");
         out.println("<body>");
         out.println("<h2>Available API Keys</h2>");
-
         out.println("<div class='center'>");
         out.println("<form action='apiKeys' method='POST'>");
         out.println("<button type='submit' name='action' value='generate'>Generate New API Key</button>");
@@ -117,13 +110,10 @@ public class ApiKeyServlet extends HttpServlet {
             }
             out.println("</table>");
         }
-
-        
-
         out.println("</body></html>");
     }
 
-    // this method handles generate and deactivate post requests
+    // Handling POST requests for generating and deactivating API keys
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession sessionObj = request.getSession(false);
@@ -136,20 +126,14 @@ public class ApiKeyServlet extends HttpServlet {
         if ("generate".equals(action)) {
             int userId = (int) sessionObj.getAttribute("user_id");
             String newApiKey = generateApiKey();
-            Boolean isTrue = apiRepository.addApiKey(userId, newApiKey);
-            if (isTrue) {
-                response.sendRedirect("apiKeys");
-            } else {
-                response.getWriter().println("Error generating API key.");
-            }
+            apiRepository.addApiKey(userId, newApiKey); 
+            response.sendRedirect("apiKeys"); 
         } else if ("deactivate".equals(action)) {
             String apiKey = request.getParameter("apiKey");
             if (apiKey != null && !apiKey.isEmpty()) {
-                Boolean isTrue = apiRepository.deactivateApiKey(apiKey);
-                if (isTrue) response.sendRedirect("apiKeys?manage=true"); 
-                else response.getWriter().println("Error deactivating API key.");
-            } else {
-                response.getWriter().println("Invalid API key provided.");
+                apiRepository.deactivateApiKey(apiKey); 
+                String referer = request.getHeader("Referer");
+                response.sendRedirect(referer != null ? referer : "apiKeys");
             }
         }
     }
