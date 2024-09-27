@@ -5,25 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Key Management</title>
-    
+    <link rel='stylesheet' type='text/css' href='DashboardStyle.css'>
 </head>
 <body>
     <h2>API Key Management</h2>
     
     <div class="center">
-        <form action="apiKeys" method="POST">
+        <form action="management" method="POST">
             <button type="submit" name="action" value="generate">Generate New API Key</button>
         </form>
     </div>
 
-    <table>
+    <table border="1">
         <tr>
             <th>API Key</th>
             <th>Status</th>
             <th>Created At</th>
             <th>Action</th>
         </tr>
-        <!-- Dynamic rows will be inserted here from the servlet response -->
+        <!-- Dynamic rows will be populated by the servlet -->
+        <tbody>
+            <!-- This will be filled with data from the servlet when rendering -->
+        </tbody>
     </table>
 </body>
 </html>

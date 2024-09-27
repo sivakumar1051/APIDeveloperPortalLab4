@@ -7,7 +7,7 @@
 
 	<servlet>
 		<servlet-name>RegisterServlet</servlet-name>
-		<servlet-class>com.siva.apidevportal.RegisterServlet</servlet-class>
+		<servlet-class>com.siva.apidevportal.Servlets.RegisterServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
     <servlet-name>RegisterServlet</servlet-name>
@@ -17,12 +17,24 @@
 
 	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
-		<servlet-class>com.siva.apidevportal.LoginServlet</servlet-class>
+		<servlet-class>com.siva.apidevportal.Servlets.LoginServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>
 		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ApiKeyServlet</servlet-name>
+		<servlet-class>com.siva.apidevportal.Servlets.ApiKeyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ApiKeyServlet</servlet-name>
+		<url-pattern>/apiKeys</url-pattern>
+	</servlet-mapping>
+	
+	
+	
 	
 	
 	
