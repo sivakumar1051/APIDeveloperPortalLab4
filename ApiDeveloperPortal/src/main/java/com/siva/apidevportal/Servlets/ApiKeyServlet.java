@@ -15,6 +15,7 @@ import java.util.UUID;
 
 public class ApiKeyServlet extends HttpServlet {
 
+	//creating object of apiRepository.
     private final ApiRepository apiRepository = new ApiRepository();
 
     @Override
@@ -31,7 +32,7 @@ public class ApiKeyServlet extends HttpServlet {
         int userId = (int) session.getAttribute("user_id");
         List<ApiKeys> apiKeys = apiRepository.getApiKeysForUser(userId);
 
-        // Determine if we need to show the management page or dashboard
+        // filtering thr rquest based on onclick 
         if (request.getParameter("manage") != null) {
             displayApiKeyManagement(out, apiKeys);
         } else {
@@ -39,7 +40,7 @@ public class ApiKeyServlet extends HttpServlet {
         }
     }
 
-    // Method to display the management page
+    // this method displays the apikey details in management page
     private void displayApiKeyManagement(PrintWriter out, List<ApiKeys> apiKeys) {
         out.println("<html>");
         out.println("<head>");
@@ -50,6 +51,7 @@ public class ApiKeyServlet extends HttpServlet {
         out.println("<h2>API Key Management</h2>");
         out.println("<div class='center'>");
         out.println("<form action='apiKeys' method='POST'>");
+        out.println("<input type='hidden' name='manage' value='true'/>"); // Added hidden input to keep management context
         out.println("<button type='submit' name='action' value='generate'>Regenerate API Key</button>");
         out.println("</form>");
         out.println("</div>");
@@ -64,6 +66,7 @@ public class ApiKeyServlet extends HttpServlet {
                 out.println("<td>" + apiKey.getStatus() + "</td>");
                 out.println("<td>" + apiKey.getCreatedAt() + "</td>");
                 out.println("<td><form action='apiKeys' method='POST'>");
+                out.println("<input type='hidden' name='manage' value='true'/>"); // Added hidden input to keep management context
                 out.println("<input type='hidden' name='apiKey' value='" + apiKey.getApi_Key() + "'>");
                 out.println("<button type='submit' name='action' value='deactivate'>Deactivate</button>");
                 out.println("</form></td>");
@@ -74,7 +77,7 @@ public class ApiKeyServlet extends HttpServlet {
         out.println("</body></html>");
     }
 
-    // Method to display the dashboard page
+    // Method to display the the details of apikeys in dashboard  page
     private void displayAvailableApiKeys(PrintWriter out, List<ApiKeys> apiKeys) {
         out.println("<html>");
         out.println("<head>");
@@ -123,22 +126,33 @@ public class ApiKeyServlet extends HttpServlet {
         }
 
         String action = request.getParameter("action");
+        int userId = (int) sessionObj.getAttribute("user_id");
+
         if ("generate".equals(action)) {
-            int userId = (int) sessionObj.getAttribute("user_id");
+            // generating the new apikey
             String newApiKey = generateApiKey();
-            apiRepository.addApiKey(userId, newApiKey); 
-            response.sendRedirect("apiKeys"); 
+            apiRepository.addApiKey(userId, newApiKey);
+
+            // filtering the requests from management page
+            if (request.getParameter("manage") != null) {
+                
+                response.sendRedirect("apiKeys?manage=true");
+            } else {
+                // Otherwise, redirect to the dashboard
+                response.sendRedirect("apiKeys");
+            }
         } else if ("deactivate".equals(action)) {
+            // updating the status of apikey
             String apiKey = request.getParameter("apiKey");
             if (apiKey != null && !apiKey.isEmpty()) {
-                apiRepository.deactivateApiKey(apiKey); 
+                apiRepository.deactivateApiKey(apiKey);
                 String referer = request.getHeader("Referer");
                 response.sendRedirect(referer != null ? referer : "apiKeys");
             }
         }
     }
 
-    // API key generation
+    // API key generation using random
     private String generateApiKey() {
         return UUID.randomUUID().toString();
     }

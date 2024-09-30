@@ -11,7 +11,7 @@
     <h2>API Key Management</h2>
     
     <div class="center">
-        <form action="management" method="POST">
+        <form action="apiKeys" method="POST">
             <button type="submit" name="action" value="generate">Generate New API Key</button>
         </form>
     </div>
@@ -23,9 +23,8 @@
             <th>Created At</th>
             <th>Action</th>
         </tr>
-        <!-- Dynamic rows will be populated by the servlet -->
         <tbody>
-            <!-- This will be filled with data from the servlet when rendering -->
+            <!-- The apikey details will be populated here-->
         </tbody>
     </table>
 </body>

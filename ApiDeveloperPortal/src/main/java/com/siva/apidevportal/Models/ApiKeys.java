@@ -1,11 +1,29 @@
 package com.siva.apidevportal.Models;
 
+
 public class ApiKeys {
 	
 	private String api_Key;
     private String status;
     private String createdAt;
+    private int user_id;
     
+	public int getUser_id() {
+		return user_id;
+	}
+
+	public ApiKeys(String api_Key, String status, String createdAt, int user_id) {
+		super();
+		this.api_Key = api_Key;
+		this.status = status;
+		this.createdAt = createdAt;
+		this.user_id = user_id;
+	}
+
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
+
 	public ApiKeys(String api_Key, String status, String createdAt) {
 		super();
 		this.api_Key = api_Key;

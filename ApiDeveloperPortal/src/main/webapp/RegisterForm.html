@@ -9,24 +9,29 @@
 		body {
 			font-family: Arial, sans-serif;
 			margin: 20px;
-		}h2 {
+		}
+		h2 {
 			text-align: center;
-		}form {
+		}
+		form {
 			max-width: 300px;
 			margin: 0 auto;
 			padding: 10px;
 			border-radius: 5px;
-		}label {
+		}
+		label {
 			display: block;
 			margin-bottom: 5px;
-		}input[type="text"],
+		}
+		input[type="text"],
 		input[type="password"],
 		input[type="email"] {
 			width: 100%;
 			padding: 8px;
 			margin-bottom: 10px;
 			box-sizing: border-box;
-		}input[type="submit"] {
+		}
+		input[type="submit"] {
 			padding: 5px 15px;
 			font-size: 14px;
 			width: 100px;
@@ -35,8 +40,13 @@
 			color: white;
 			border: none;
 			border-radius: 3px;
-		}input[type="submit"]:hover {
+		}
+		input[type="submit"]:hover {
 			background-color: #0056b3;
+		}
+		.login-link {
+			text-align: center;
+			margin-top: 10px;
 		}
 	</style>
 </head>
@@ -49,13 +59,17 @@
 		<input type="text" id="UserName" name="UserName" required>
 
 		<label for="Password">Password:</label>
-		<input type="Password" id="Password" name="Password" required>
+		<input type="password" id="Password" name="Password" required>
 
 		<label for="email">Email:</label>
 		<input type="email" id="email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
 
 		<input type="submit" value="Register">
 	</form>
+
+	<div class="login-link">
+		<p>Already a user? <a href="login">Login</a></p>
+	</div>
 	
 </body>
 

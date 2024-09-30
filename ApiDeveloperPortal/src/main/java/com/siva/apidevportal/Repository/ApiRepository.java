@@ -8,16 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApiRepository {
-     private  static Connection connObject=null;
-     private static PreparedStatement prpdStatement;
-	
-    // Method to get all API keys for a user by user_id
+    private static Connection connObject = null;
+    private static PreparedStatement prpdStatement;
+
     public List<ApiKeys> getApiKeysForUser(int userId) {
         List<ApiKeys> apiKeys = new ArrayList<>();
         try {
             connObject = ConnectionUtil.getConnection();
-            String selecetQuery = "SELECT api_key, status, created_at FROM api_keys WHERE user_id = ?";
-            prpdStatement = connObject.prepareStatement(selecetQuery);
+            String selectQuery = "SELECT api_key, status, created_at FROM api_keys WHERE user_id = ?";
+            prpdStatement = connObject.prepareStatement(selectQuery);
             prpdStatement.setInt(1, userId);
             ResultSet userData = prpdStatement.executeQuery();
 
@@ -25,7 +24,7 @@ public class ApiRepository {
                 String api_Key = userData.getString("api_key");
                 String status = userData.getString("status");
                 String createdAt = userData.getString("created_at");
-                apiKeys.add(new ApiKeys(api_Key, status, createdAt));
+                apiKeys.add(new ApiKeys(api_Key, status, createdAt, userId)); // Assuming userId is part of ApiKeys
             }
             userData.close();
             prpdStatement.close();
@@ -36,7 +35,6 @@ public class ApiRepository {
         return apiKeys;
     }
 
-    // Method to add a new API key for a user by user_id
     public boolean addApiKey(int userId, String apiKey) {
         try {
             connObject = ConnectionUtil.getConnection();
@@ -54,13 +52,30 @@ public class ApiRepository {
         return false;
     }
 
-    // Method to deactivate an API key by api_key value
     public boolean deactivateApiKey(String apiKey) {
         try {
             connObject = ConnectionUtil.getConnection();
             String updateQuery = "UPDATE api_keys SET status = 'inactive' WHERE api_key = ?";
             prpdStatement = connObject.prepareStatement(updateQuery);
             prpdStatement.setString(1, apiKey);
+            int updateCount = prpdStatement.executeUpdate();
+            prpdStatement.close();
+            connObject.close();
+            return updateCount > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean regenerateApiKey(int userId, String oldApiKey, String newApiKey) {
+        try {
+            connObject = ConnectionUtil.getConnection();
+            String updateQuery = "UPDATE api_keys SET api_key = ?, status = 'active' WHERE api_key = ? AND user_id = ?";
+            prpdStatement = connObject.prepareStatement(updateQuery);
+            prpdStatement.setString(1, newApiKey);
+            prpdStatement.setString(2, oldApiKey);
+            prpdStatement.setInt(3, userId);
             int updateCount = prpdStatement.executeUpdate();
             prpdStatement.close();
             connObject.close();
